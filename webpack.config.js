@@ -22,7 +22,48 @@ const config = {
         //加载css 到页面上
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
-    }
+    },
+    {
+			//fonts链接处理
+			test: /\.(eot|ttf|woff|woff2)(\?.+)?$/,
+			use: [{
+				loader: 'url-loader',
+				//小于limit to base64
+				options: {
+					limit: 8192,
+					//产出地址 
+					outputPath: "assets/fonts/",
+					//域名地址
+					//publicPath: release + "assets/fonts/",
+					name: "[name].[ext]?[hash]"
+				}
+			}]
+    },
+    {
+			test: /\.(gif|png|jpe?g|svg)$/i,
+			loaders: [
+				'url-loader?limit=8192&outputPath=assets/img/&name=[name].[ext]?[hash]',
+				{
+					loader: 'image-webpack-loader',
+					options: {
+						gifsicle: {
+							interlaced: false,
+						},
+						optipng: {
+							optimizationLevel: 1,
+						},
+						pngquant: {
+							quality: '65-90',
+							speed: 4
+						},
+						mozjpeg: {
+							progressive: true,
+							quality: 65
+						}
+					}
+				}
+			]
+		}
     ]
   },
   devServer: {
